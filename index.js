@@ -7,6 +7,7 @@ const moviesWrapper = $('.movies');
 const inputSearch = $('#header-input');
 const body = $('body');
 const darkMode = $('.moon');
+const darkBtn = $('.bi');
 
 
 const allMovies = movies.map((el) => {
@@ -101,5 +102,6 @@ function searchProduct(searchTerm) {
 
 
 darkMode.addEventListener('click', () => {
+    darkBtn.classList.toggle("bi-sun-fill")
     body.classList.toggle('dark-mode')
 })
