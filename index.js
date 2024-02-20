@@ -8,7 +8,11 @@ const inputSearch = $('#header-input');
 const body = $('body');
 const darkMode = $('.moon');
 const darkBtn = $('.bi');
+const resultCount = $('.search-result')
 
+const formFilter = $('#filter-form')
+const searchName = $('#name');
+const filmRating = $('#number')
 
 const allMovies = movies.map((el) => {
     return {
@@ -71,7 +75,7 @@ function renderAllMovies(movieList) {
                    
                     <button 
                         data-like=${el.id}
-                        class="grid hover:bg-red-700 hover:text-white duration-500 text-red-700 place-content-center p-4 border w-12 h-12 rounded-full">
+                        class="grid text-red-700 place-content-center p-4 border w-12 h-12 rounded-full">
                         <i class="bi bi-suit-heart-fill "></i>
                     </button>
 
@@ -91,17 +95,89 @@ function renderAllMovies(movieList) {
 renderAllMovies(allMovies)
 
 
+// ------------- Search movies function -------------------
+
 inputSearch.addEventListener('keyup', (e) => {
-    moviesWrapper.innerHTML = ""
-    searchProduct(e.target.value)
+    if (e.keyCode == 13) {
+        moviesWrapper.innerHTML = "<h1 class='mx-auto mt-[230px] font-bold text-red-600 text-[24px]'>LOADING...</h1>"
+        setTimeout(() => {
+            searchProduct(e.target.value)
+        },1700)
+    }
 })
 function searchProduct(searchTerm) {
     const searchReslut = allMovies.filter((el) => el.title.toLowerCase().includes(searchTerm.toLowerCase()))
-    renderAllMovies(searchReslut)
+    if (searchReslut.length) {
+        moviesWrapper.innerHTML = ""
+        resultCount.textContent = `${searchReslut.length} movies found`;
+        renderAllMovies(searchReslut)
+    } else {
+        resultCount.innerHTML = ""
+        moviesWrapper.innerHTML = "<h1 class='mx-auto mt-[230px] font-bold text-red-600 text-[24px]'>NOT FOUND</h1>"
+    }
 }
 
 
+
+// -------------- Dark mode function-------------------
+
 darkMode.addEventListener('click', () => {
+    dark()
+})
+
+function dark() {
     darkBtn.classList.toggle("bi-sun-fill")
     body.classList.toggle('dark-mode')
+
+    if (body.classList.contains('dark-mode')) {
+        localStorage.setItem('dark-mode', true)
+    } else {
+        localStorage.setItem('dark-mode', false)
+    }
+}
+
+
+function localDarkMode() {
+    let isDark = localStorage.getItem('dark-mode');
+
+    if (isDark == 'true') {
+        darkBtn.classList.add("bi-sun-fill");
+        body.classList.add('dark-mode');
+    } else {
+        darkBtn.classList.remove("bi-sun-fill");
+        body.classList.remove('dark-mode');
+    }
+}
+
+localDarkMode()
+
+
+// --------------- Multi search function -----------------
+
+function multiSearch() {
+    let name = searchName.value;
+    let rating = filmRating.value
+    let category = categoryOption.value
+    console.log(name, rating, category);
+
+    const searchReslut = allMovies.filter((el) => {
+        return el.title.toLowerCase().includes(name.toLowerCase()) && el.category.includes(category) && el.rating >= rating
+    });
+
+    if (searchReslut.length) {
+        moviesWrapper.innerHTML = ""
+        resultCount.textContent = `${searchReslut.length} movies found`;
+        renderAllMovies(searchReslut)
+    } else {
+        resultCount.innerHTML = ""
+        moviesWrapper.innerHTML = "<h1 class='mx-auto mt-[230px] font-bold text-red-600 text-[24px]'>NOT FOUND</h1>"
+    }
+}
+
+formFilter.addEventListener('submit', (e) => {
+    e.preventDefault();
+    moviesWrapper.innerHTML = "<h1 class='mx-auto mt-[230px] font-bold text-red-600 text-[24px]'>LOADING...</h1>"
+    setTimeout(() => {
+        multiSearch()
+    },1500)
 })

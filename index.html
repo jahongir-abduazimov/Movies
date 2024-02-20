@@ -57,11 +57,11 @@
 
         <!-- ASIDE SECTION STARTED -->
         <aside id="aside" class="border min-h-screen fixed p-4 top-[90px] bg-white w-[320px] shadow-lg">
-            <form action="#">
+            <form action="#" id="filter-form">
                 <label for="name" class="my-6 block">
                     <p class="text-gray-500 mb-2">Enter film title:</p>
                     <input id="name" type="search" placeholder="Enter film title.." class="w-full rounded-md  h-[50px] px-4
-                    border focus:outline-none duration-150 focus:ring-red-600 ring-2 ring-red-400 />
+                    border focus:outline-none duration-150 focus:ring-red-600 ring-2 ring-red-400" />
                 </label>
                 <label for="category" class="my-6 block">
                     <p class="text-gray-500 mb-2">Select film category:</p>
@@ -74,7 +74,7 @@
                 </label>
                 <label for="rating" class="my-6 block">
                     <p class="text-gray-500 mb-2">Select film rating:</p>
-                    <input id="name" type="number" max="10" min="1" placeholder="Enter film title..." class="w-full rounded-md h-[50px] px-4
+                    <input id="number" type="number" max="10" min="1" placeholder="Enter film title..." class="w-full rounded-md h-[50px] px-4
                     border focus:outline-none duration-150 focus:ring-red-600 ring-2 ring-red-400" />
                 </label>
                 <button type="submit" class="p-3 ring-4 ring-transparent hover:ring-green-900
@@ -89,6 +89,9 @@
 
         <!-- SECTION-1 STARTED -->
         <section id="movies" class="grow ml-[320px] p-8">
+            <h1 class="font-bold text-[24px] text-[red] mb-4 search-result">
+                
+            </h1>
             <div class="movies flex flex-wrap gap-10"></div>
             <!-- dynamic render -->
             </div>
