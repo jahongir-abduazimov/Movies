@@ -1,6 +1,6 @@
 "use strict";
 
-movies.splice(100)
+movies.splice(40)
 
 const categoryOption = $('#category');
 const moviesWrapper = $('.movies');
@@ -13,6 +13,8 @@ const resultCount = $('.search-result')
 const formFilter = $('#filter-form')
 const searchName = $('#name');
 const filmRating = $('#number')
+
+const toastElement = $('.toast')
 
 const allMovies = movies.map((el) => {
     return {
@@ -75,8 +77,8 @@ function renderAllMovies(movieList) {
                    
                     <button 
                         data-like=${el.id}
-                        class="grid text-red-700 place-content-center p-4 border w-12 h-12 rounded-full">
-                        <i class="bi bi-suit-heart-fill "></i>
+                        class="like grid text-red-700 place-content-center p-4 border w-12 h-12 rounded-full">
+                        <i data-like=${el.id} class="like bi bi-suit-heart-fill "></i>
                     </button>
 
                     <a href="${el.youtube}" target="_blank" class="flex hover:bg-black hover:text-white duration-500  justify-center gap-x-2 text-xl items-center border min-w-24 px-3 h-12 rounded-full"> 
@@ -181,3 +183,45 @@ formFilter.addEventListener('submit', (e) => {
         multiSearch()
     },1500)
 })
+
+
+moviesWrapper.addEventListener('click', (e) => {
+    if (e.target.classList.contains('like')) {
+        let id = e.target.getAttribute('data-like')
+        let titleFilm = allMovies.filter(movie => movie.id === id)[0].title;
+        toast('success', `${titleFilm.length > 6 ? titleFilm.substring(0,16) + "..." : titleFilm} film addad`, 3000)
+        saveToLocalStorage(id)
+    }
+})
+
+function toast(type, massage, timeout) {
+    toastElement.innerHTML = massage;
+    if (type === 'success') {
+        toastElement.classList.remove('hide');
+        toastElement.classList.add('show');
+        setTimeout(() => {
+            toastElement.classList.remove('show')
+            toastElement.classList.add('hide')
+        }, timeout)
+    } else if (type === 'error') {
+        toastElement.classList.remove('hide');
+        toastElement.classList.add('show-error');
+        setTimeout(() => {
+            toastElement.classList.remove('show-error')
+            toastElement.classList.add('hide')
+        }, timeout)
+    }
+}
+
+let wishlist = JSON.parse(localStorage.getItem('movies')) || []
+
+function saveToLocalStorage(moveId) {
+    if (moveId) {
+        if (!wishlist.includes(moveId)) {
+            wishlist.push(moveId)
+            localStorage.setItem('movies', JSON.stringify(wishlist))
+        } else {
+            toast('error', 'This movie already added', 2000)
+        }
+    }
+}
